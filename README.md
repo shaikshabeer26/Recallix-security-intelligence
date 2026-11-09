@@ -1,127 +1,160 @@
-<h1 align='center'> 🛡️ RECALLIX — AI Security Incident Intelligence</h1>
-
 <div align="center">
 
-### An Intelligent Approach to Incident Investigation with Persistent Memory
+# 🛡️ RECALLIX
 
-**An AI-powered cybersecurity incident triage system that combines rule-based assessment, Large Language Model reasoning, outcome-aware platform memory, and fault-tolerant background queues.**
+### AI Security Incident Intelligence with Persistent Memory
 
-*Investigate. Analyze. Recall. Retain.*
+**An AI-powered incident triage platform that combines a deterministic risk engine, LLM reasoning, outcome-aware long-term memory, and fault-tolerant background processing.**
+
+*Investigate · Analyze · Recall · Retain*
 
 <br/>
 
-[![Python](https://shields.io)](https://python.org)
-[![FastAPI](https://shields.io)](https://tiangolo.com)
-[![React](https://shields.io)](https://react.dev)
-[![TailwindCSS](https://shields.io)](https://tailwindcss.com)
-[![License](https://shields.io)](LICENSE)
-
-[![GitHub Stars](https://shields.io)](https://github.com)
-[![GitHub Forks](https://shields.io)](https://github.com)
-[![Last Commit](https://shields.io)](https://github.com)
+🐍 [**Python**](https://python.org) &nbsp;•&nbsp; ⚡ [**FastAPI**](https://fastapi.tiangolo.com) &nbsp;•&nbsp; ⚛️ [**React**](https://react.dev) &nbsp;•&nbsp; 🎨 [**Tailwind CSS**](https://tailwindcss.com) &nbsp;•&nbsp; 📄 [**MIT License**](LICENSE)
 
 </div>
 
+---
+
+## 📑 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [How It Works](#-how-it-works)
+- [Core Intelligence Layers](#-core-intelligence-layers)
+- [Incident Lifecycle & States](#-incident-lifecycle--states)
+- [Dashboard](#-dashboard)
+- [Project Structure](#-project-structure)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Build Challenges](#-build-challenges--lessons-learned)
+
+---
+
 ## 📌 Overview
 
-Traditional incident investigation platforms analyze security events using only currently visible indicators. Once an investigation finishes, its valuable analytical findings are trapped inside closed logs, databases, or single-use tickets.
+Traditional incident investigation tools analyze events using only the indicators visible *right now*. Once an investigation closes, its findings end up buried in logs, databases, or single-use tickets.
 
-This creates a critical operational constraint:
-- When a similar security vector targets an enterprise weeks later, security analysts must repeat much of the previous investigation from scratch.
-- Machine learning probabilities alone don't provide structural, deterministic logic.
-- AI investigation assets fail or hit API quota boundaries when running synchronously.
-- Retained memories risk losing traceability to their original source incidents.
+That creates real operational problems:
 
-**RECALLIX** bridges this gap by combining rule-based risk engines, high-speed LLM reasoning, historical memory matching via Hindsight, human-in-the-loop analyst verification, and an asynchronous background task runner to form an outcome-aware intelligence platform.
+| Problem | Impact |
+|---|---|
+| 🔁 Similar attacks recur weeks later | Analysts repeat the investigation from scratch |
+| 🎲 ML probabilities lack structure | Scores are hard to explain or audit |
+| ⏱️ AI calls fail or hit quota limits | Synchronous workflows break mid-investigation |
+| 🔗 Retained knowledge loses its origin | No traceability back to the source incident |
 
-### 🔄 RECALLIX Pipeline
+**RECALLIX** closes these gaps by combining:
 
-```text
-                  INCIDENT SUBMISSION
-                           │
-                           ▼
-               HISTORICAL MEMORY RETRIEVAL
-                      (Hindsight)
-                           │
-                           ▼
-               RULE-BASED RISK ENGINE
-                           │
-                           ▼
-                GROQ LLM INVESTIGATION
-                           │
-                           ▼
-               SQLITE SCHEMA PERSISTENCE
-                           │
-                           ▼
-               ANALYST VERIFICATION LOOP
-                           │
-                           ▼
-               FAULT-TOLERANT RETRY DAEMON
-                           │
-                           ▼
-               HINDSIGHT MEMORY RETENTION
+- ⚖️ a **rule-based risk engine** for objective severity scoring
+- ⚡ **Groq-hosted LLM reasoning** for structured investigation reports
+- 🧠 **Hindsight** long-term memory for cross-incident recall
+- 👤 **human-in-the-loop** analyst verification
+- 🔄 an **asynchronous retry daemon** for fault tolerance
+
+---
+
+## ✨ Key Features
+
+- **Deterministic severity scoring**, fully separate from AI output, so the LLM can never dictate threat levels
+- **Structured AI dossiers** returned in an enforced JSON schema
+- **Memory-aware investigations** that compare new incidents against verified past ones
+- **Idempotent memory retention**, so there are no duplicates even if verification is committed twice
+- **Graceful degradation**: quota limits and network failures fall back to rule-based metrics
+- **Persistent reports** stored in SQLite, surviving refreshes and navigation
+- **Audit-friendly memory cards** grouped by their original `Source: INC-ID`
+- **Dark SOC-style dashboard** built for fast scanning
+
+---
+
+## 🔄 How It Works
+
+```mermaid
+flowchart TD
+    A[📥 Incident Submission] --> B[🧠 Historical Memory Retrieval<br/>Hindsight]
+    B --> C[⚖️ Rule-Based Risk Engine]
+    C --> D[⚡ Groq LLM Investigation]
+    D --> E[💾 SQLite Persistence]
+    E --> F[👤 Analyst Verification]
+    F --> G[🔄 Fault-Tolerant Retry Daemon]
+    G --> H[📚 Hindsight Memory Retention]
+    H -. recalled in future incidents .-> B
 ```
 
 ---
 
 ## 🧠 Core Intelligence Layers
 
-RECALLIX utilizes a multi-layered verification framework to maintain data integrity across the platform lifecycle.
+RECALLIX uses a multi-layered framework to keep data trustworthy across the whole incident lifecycle.
 
-### 1. Rule-Based Risk Engine
-To prevent LLM hallucination from dictating threat metrics, RECALLIX runs a deterministic rules pipeline. It checks evidence length and incident classification rules to build objective severity ratings.
+### 1️⃣ Rule-Based Risk Engine
 
-| Parameter | Operational Threshold |
+To stop LLM hallucination from influencing threat metrics, severity comes from a deterministic rules pipeline that inspects evidence length and incident classification.
+
+| Rule | Score Contribution |
 |---|---:|
-| Base Match Score | 40% |
-| Multi-Vector Addition | +20% |
-| Identity Compromise Affected | +20% |
+| Base match score | **40%** |
+| Multi-vector incident | **+20%** |
+| Identity compromise affected | **+20%** |
 
-The final score drives security tier assignment (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`) completely separately from AI reasoning loops.
+The final score maps to a tier: `LOW` · `MEDIUM` · `HIGH` · `CRITICAL`, entirely independent of the AI reasoning loop.
 
-### 2. Groq AI Investigation Module
-Integrates the `llama-3.3-70b-specdec` model via Groq's high-speed inference layer to construct a structured investigation breakdown mapping execution gaps and next operational protocols.
+### 2️⃣ Groq AI Investigation Module
 
-**Enforced Response JSON Schema:**
-- `executive_summary`: Concise incident narrative.
-- `evidence_analysis`: Line-by-line validation logs.
-- `historical_comparison`: Direct matching against past Hindsight knowledge.
-- `uncertainties`: Known evidence gaps or validation failures.
-- `next_investigation_steps`: Actionable containment sequences.
-- `analyst_guidance`: Investigating protocols.
+Uses `llama-3.3-70b-specdec` through Groq's high-speed inference to produce a structured breakdown of evidence gaps and next steps.
 
-### 3. Hindsight Long-Term Memory (Recall & Retention)
-Rather than treating incidents as isolated artifacts, RECALLIX queries a local Hindsight microservice (`127.0.0.1:8889`) across a dedicated cluster bank. When analysts click "Commit Verification," an idempotent document signature (`recallix-verified-incident-{id}`) is submitted, enabling stable, duplication-free long-term cross-incident recall.
+**Enforced JSON response schema:**
 
----
+| Field | Purpose |
+|---|---|
+| `executive_summary` | Concise incident narrative |
+| `evidence_analysis` | Line-by-line validation of the evidence |
+| `historical_comparison` | Matches against past Hindsight knowledge |
+| `uncertainties` | Known evidence gaps or validation failures |
+| `next_investigation_steps` | Actionable containment sequence |
+| `analyst_guidance` | Investigation protocols for the analyst |
 
-## ⚙️ Risk Decision Matrix
+### 3️⃣ Hindsight Long-Term Memory
 
-The platform maps incident lifecycles across six separate conditions to isolate application failures:
+Instead of treating incidents as isolated artifacts, RECALLIX queries a local **Hindsight** microservice (`127.0.0.1:8889`) against a dedicated memory bank.
+
+When an analyst clicks **Commit Verification**, an idempotent document signature is submitted:
 
 ```text
-  [Incident Created] ──> [Risk Assessed] ──> [AI Analysis Generated]
-                                                      │
-  [Memory Retained] <── [Analyst Verified] <── [SQLite Persisted]
+recallix-verified-incident-{id}
 ```
 
-### Response States & Recovery Actions
-
-| State Condition | Meaning | Recovery Action |
-|:---:|---|---|
-| **completed** | AI reasoning compiled and locally written. | Ready for analyst manual audit sign-off. |
-| **quota_limited** | Upstream token thresholds hit (HTTP 429). | System defaults to deterministic rule metrics safely. |
-| **connection_error** | Upstream provider network down. | Local database holds workspace for later manual retry. |
+This gives stable, duplicate-free, cross-incident recall with full traceability.
 
 ---
 
-## 🖥️ RECALLIX Dark SOC Dashboard
+## ⚙️ Incident Lifecycle & States
 
-RECALLIX is built around a custom, dark-themed Security Operations Center template featuring sub-300ms layout views:
+```mermaid
+flowchart LR
+    A[Incident Created] --> B[Risk Assessed] --> C[AI Analysis Generated]
+    C --> D[SQLite Persisted] --> E[Analyst Verified] --> F[Memory Retained]
+```
 
-* **Engine Status Checker:** Automatically hits the backend root endpoint `/` to confirm state connectivity (`● System online`) instead of throwing false offline errors.
-* **Persistent AI Dossier View:** Bypasses standard React volatile state drops. AI reports are completely string-serialized into SQLite columns, ensuring data survives page refreshes and view changes.
-* **Traceable Memory Cards:** Groups retrieved historical elements by their original `Source: INC-ID` parameters to maintain audit trails.
+### Response States & Recovery
+
+| State | Meaning | Recovery Action |
+|:---:|---|---|
+| ✅ `completed` | AI reasoning compiled and saved locally | Ready for analyst audit sign-off |
+| ⚠️ `quota_limited` | Upstream token limit hit (HTTP 429) | Falls back safely to deterministic rule metrics |
+| 🔌 `connection_error` | Upstream provider unreachable | Workspace held in local DB for later retry |
+
+---
+
+## 🖥️ Dashboard
+
+A custom dark-themed Security Operations Center UI with sub-300ms view transitions.
+
+| Feature | Description |
+|---|---|
+| 🟢 **Engine Status Checker** | Pings the backend root endpoint `/` and shows `● System online` instead of false offline errors |
+| 📄 **Persistent AI Dossier** | Reports are string-serialized into SQLite columns, so they survive page refreshes and view changes |
+| 🗂️ **Traceable Memory Cards** | Retrieved history is grouped by original `Source: INC-ID` to preserve audit trails |
 
 ---
 
@@ -137,7 +170,7 @@ Recallix-security-intelligence/
 │       ├── models/
 │       │   └── incident.py
 │       ├── memory/
-│       │   └── hindsight_service import.py
+│       │   └── hindsight_service.py
 │       ├── routes/
 │       │   └── incidents.py
 │       ├── services/
@@ -160,50 +193,53 @@ Recallix-security-intelligence/
 ├── requirements.txt
 ├── recallix.db
 └── README.md
+└── article.md
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-### Backend & Database Layer
-![Python](https://shields.io)
-![FastAPI](https://shields.io)
-![SQLAlchemy](https://shields.io)
-![SQLite](https://shields.io)
-
-### AI & Knowledge Retention
-![Groq](https://shields.io)
-![Hindsight](https://shields.io)
-
-### Frontend Layer
-![React](https://shields.io)
-![Vite](https://shields.io)
-![TailwindCSS](https://shields.io)
+| Layer | Technologies |
+|---|---|
+| **Backend** | 🐍 Python · ⚡ FastAPI · 🧱 SQLAlchemy · 🗄️ SQLite |
+| **AI & Memory** | 🤖 Groq (`llama-3.3-70b-specdec`) · 🧠 Hindsight |
+| **Frontend** | ⚛️ React · ⚡ Vite · 🎨 Tailwind CSS |
 
 ---
 
-## 💻 Installation & Setup
+## 🚀 Getting Started
 
-### 1. Clone the Repository
+### Prerequisites
+
+- Python 3.10+
+- Node.js 18+
+- A [Groq API key](https://console.groq.com)
+- A running Hindsight service at `127.0.0.1:8889`
+
+### 1. Clone the repository
+
 ```bash
-git clone https://github.com
+git clone https://github.com/YOUR_USERNAME/Recallix-security-intelligence.git
 cd Recallix-security-intelligence
 ```
 
-### 2. Configure the Python Backend Environment
+### 2. Set up the backend
+
 ```bash
 python -m venv .venv
-# On Windows:
+
+# Windows
 .venv\Scripts\activate
-# On Linux/macOS:
+# Linux / macOS
 source .venv/bin/activate
 
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Create a root environment configuration file `.env` and fill in your variables:
+Create a `.env` file in the project root:
+
 ```env
 GROQ_API_KEY=your_secret_groq_api_token
 GROQ_MODEL=llama-3.3-70b-specdec
@@ -211,23 +247,42 @@ HINDSIGHT_BASE_URL=http://127.0.0.1:8889
 HINDSIGHT_BANK_ID=security-incident-intelligence
 ```
 
-Start the application container:
+> ⚠️ Never commit your `.env` file. Make sure it is listed in `.gitignore`.
+
+Start the API server:
+
 ```bash
 uvicorn backend.app.main:app --reload --port 8000
 ```
 
-### 3. Launch the React Web Frontend
+### 3. Launch the frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open your browser and navigate to `http://localhost:5173`.
+
+Open **http://localhost:5173** in your browser.
 
 ---
 
-## 🧩 Build Challenges & Technical Obstacles
+## 🧩 Build Challenges & Lessons Learned
 
 ### 1. SQLite Data Serialization Drops
-**Problem:** SQLAlchemy's standard JSON column structures return raw unparsed strings when queried via basic dictionaries on fast reloads, causing frontend layout modules to break.
 
+**Problem:** SQLAlchemy's standard JSON column returned raw, unparsed strings on fast reloads when queried through basic dictionaries, which broke frontend layout components.
+
+**Solution:** AI reports are explicitly serialized to strings before storage and parsed on retrieval, so the dossier stays intact across refreshes.
+
+<!-- Add more challenges here -->
+
+---
+
+<div align="center">
+
+**Built to make every investigation count.** 🛡️
+
+*If RECALLIX helps you, consider giving it a ⭐*
+
+</div>
